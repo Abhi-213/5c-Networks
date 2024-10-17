@@ -35,5 +35,5 @@ Components of ATTENTION U-NET are:
 * Skip Connections with Attention:skip connections in Attention U-Net carry feature maps from the encoder to the decoder. However, attention gates are applied to these skip connections, refining the features passed between the two paths.
 
 <div align="center">
-<img src="https://www.researchgate.net/publication/356730514/figure/fig3/AS:11431281088641163@1665194986855/Proposed-2D-Attention-U-Net-architecture-Example-with-three-downsampling-levels-and-a.png" alt="ATTENTION UNET" width="700"/></div>
+<img src="https://miro.medium.com/v2/resize:fit:1248/0*w5nj77arNhBEj9Jr.jpg" alt="ATTENTION UNET" width="700"/></div>
   
