@@ -12,6 +12,9 @@ It incorporates skip connections by concatenating feature maps from the encoder 
 
 ![U-NET ARCHITECTURE](https://media.geeksforgeeks.org/wp-content/uploads/20220614121231/Group14.jpg)
 
+<img src="[image-url](https://media.geeksforgeeks.org/wp-content/uploads/20220614121231/Group14.jpg)" alt="Alt text" width="300"/>
+
+
 ### Varients of U-net
 * NESTED U-NET(U-NET++)
 * ATTENTION U-NET
