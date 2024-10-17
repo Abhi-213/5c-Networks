@@ -273,6 +273,7 @@ Dice Coefficient Formula:
 
 **Dice(A, B)** = 2.|A∩B|/|A|+|B|
 </div>
+
 Where:
 * A is the ground truth mask.
 * B is the predicted mask.
