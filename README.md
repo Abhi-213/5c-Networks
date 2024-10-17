@@ -56,6 +56,5 @@ Preprocessing of Brain MRI Images:
             nn.BatchNorm2d(out_channels),
             nn.ReLU(inplace=True)
         )
-
-    def forward(self, x):
-        return self.conv(x)'''
+     def forward(self, x):
+        return self.conv(x)
