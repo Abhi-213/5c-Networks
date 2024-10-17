@@ -3,7 +3,7 @@
 ### U-NET<br>
 U-NET one of the type of computer vision architecture,which is widely used for image segmentation particularly in Bio Medical Feilds.</br><br>
 Components of U-Net are:</br>
-- Encoder: it performs convolutions followed by pooling operations(Downsampling) to capture high-level features from the input image.
+- Encoder: It performs convolutions followed by pooling operations(Downsampling) to capture high-level features from the input image.
 The encoder gradually reduces the spatial dimensions while increasing the number of feature maps.
 - BottleNeck: This is the deepest part of the network, where the feature maps are the smallest in spatial dimensions but richest in learned features.
 - Decoder: consisting of upsampling operations (transposed convolutions) that gradually recover the spatial dimensions of the feature maps.
