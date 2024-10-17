@@ -10,9 +10,8 @@ The encoder gradually reduces the spatial dimensions while increasing the number
 It incorporates skip connections by concatenating feature maps from the encoder at corresponding levels, which helps recover fine-grained details lost during downsampling.
 - Skip Connection: Fine-grained features are passed along to the corresponding upsampling layers.
 
-![U-NET ARCHITECTURE](https://media.geeksforgeeks.org/wp-content/uploads/20220614121231/Group14.jpg)
 
-<img src="https://media.geeksforgeeks.org/wp-content/uploads/20220614121231/Group14.jpg" alt="Alt text" width="300"/>
+<img src="https://media.geeksforgeeks.org/wp-content/uploads/20220614121231/Group14.jpg" alt="Alt text" width="700"/>
 
 
 ### Varients of U-net
