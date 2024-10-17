@@ -265,16 +265,15 @@ The Dice score is calculated as follows:
 
 ### Dice Coefficient Formula:
 
-\[ \text{Dice}(A, B) = \frac{2 \cdot |A \cap B|}{|A| + |B|} \]
-
-Where:
-
-- **A** is the ground truth mask.
-- **B** is the predicted mask.
-- \(|A \cap B|\) is the number of pixels where both **A** and **B** have a value of 1 (i.e., true positives).
-- \(|A|\) and \(|B|\) are the total number of pixels in **A** and **B** (i.e., true positives + false positives + false negatives).
-
+**Dice(A, B)** = 2.|A∩B|/|A|+|B|
 </div>
+Where:
+- A is the ground truth mask.
+- B is the predicted mask.
+- |A| and |B| is the number of pixels where both 𝐴 and 𝐵 have a value of 1 (i.e., true positives).
+- |A∩B| are the total number of pixels in A and B (i.e., true positives + false positives + false negatives).
+
+
 
 
 
