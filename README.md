@@ -45,7 +45,8 @@ Preprocessing of Brain MRI Images:
 * Data Splitting: Divides the dataset into training (80%) and validation (20%) sets using train_test_split.
 * DataLoader Setup: Creates PyTorch DataLoader objects for batching and shuffling the training and validation data, essential for efficient model training
 
-'''python
+
+```
 class ConvBlock(nn.Module):
     def __init__(self, in_channels, out_channels):
         super(ConvBlock, self).__init__()
