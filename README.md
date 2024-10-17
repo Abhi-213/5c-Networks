@@ -259,19 +259,25 @@ The main AttentionUNet class defines the complete architecture, which consists o
 
 ### DICE METRICS
 The Dice coefficient (also known as the Sørensen–Dice index) is a commonly used metric for evaluating the performance of segmentation models, particularly in the field of medical image analysis. It measures the overlap between two sets, such as the predicted segmentation mask and the ground truth mask. The Dice score ranges from 0 (no overlap) to 1 (perfect overlap).
+```
+def dice_coeff(pred, target, smooth=1e-5):
+    pred = torch.sigmoid(pred)  # Convert logits to probabilities
+    pred = pred > 0.5  # Binarize predictions (threshold)
+    intersection = (pred * target).sum()
+    return (2. * intersection + smooth) / (pred.sum() + target.sum() + smooth)
+```
 
 The Dice score is calculated as follows:
 <div align="center">
-
-### Dice Coefficient Formula:
+Dice Coefficient Formula:
 
 **Dice(A, B)** = 2.|A∩B|/|A|+|B|
 </div>
 Where:
-- A is the ground truth mask.
-- B is the predicted mask.
-- |A| and |B| is the number of pixels where both 𝐴 and 𝐵 have a value of 1 (i.e., true positives).
-- |A∩B| are the total number of pixels in A and B (i.e., true positives + false positives + false negatives).
+* A is the ground truth mask.
+* B is the predicted mask.
+* |A| and |B| is the number of pixels where both 𝐴 and 𝐵 have a value of 1 (i.e., true positives).
+* |A∩B| are the total number of pixels in A and B (i.e., true positives + false positives + false negatives).
 
 
 
