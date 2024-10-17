@@ -45,6 +45,7 @@ Preprocessing of Brain MRI Images:
 * Data Splitting: Divides the dataset into training (80%) and validation (20%) sets using train_test_split.
 * DataLoader Setup: Creates PyTorch DataLoader objects for batching and shuffling the training and validation data, essential for efficient model training
 
+Nested UNET Architecture:
 
 ```
 class ConvBlock(nn.Module):
@@ -59,4 +60,7 @@ class ConvBlock(nn.Module):
             nn.ReLU(inplace=True)
         )
      def forward(self, x):
-        return self.conv(x)
+        return self.conv(x);
+ ```
+ConvBlock Class:
+Defines a convolutional block consisting of two convolutional layers, each followed by batch normalization and a ReLU activation function
