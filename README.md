@@ -36,4 +36,26 @@ Components of ATTENTION U-NET are:
 
 <div align="center">
 <img src="https://media.springernature.com/lw1200/springer-static/image/art%3A10.1007%2Fs11042-022-13256-6/MediaObjects/11042_2022_13256_Fig1_HTML.png" alt="ATTENTION UNET" width="700"/></div>
-  
+
+## Computer Vision: Brain MRI Metastasis Segmentation Assignment
+Preprocessing of Brain MRI Images:
+* CLAHE Preprocessing: Improves image contrast using CLAHE to enhance metastasis visibility.
+* Custom Dataset Class: Loads images and corresponding masks, applies preprocessing, and converts them into PyTorch tensors.
+* Data Augmentation: Uses Albumentations for transformations like flips, rotations, and brightness adjustments to augment the training data.
+* Data Splitting: Divides the dataset into training (80%) and validation (20%) sets using train_test_split.
+* DataLoader Setup: Creates PyTorch DataLoader objects for batching and shuffling the training and validation data, essential for efficient model training
+
+'''class ConvBlock(nn.Module):
+    def __init__(self, in_channels, out_channels):
+        super(ConvBlock, self).__init__()
+        self.conv = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1),
+            nn.BatchNorm2d(out_channels),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1),
+            nn.BatchNorm2d(out_channels),
+            nn.ReLU(inplace=True)
+        )
+
+    def forward(self, x):
+        return self.conv(x)'''
