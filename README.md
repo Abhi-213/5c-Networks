@@ -27,4 +27,13 @@ This helps to reduce the issue of vanishing gradients and allows for more effect
 <div align="center">
 <img src="https://media.geeksforgeeks.org/wp-content/uploads/20230628132335/UNET.webp" alt="UNET++" width="700"/></div>
 
+## ATTENTION U-NET
+ATTENTION UNET is an advanced varient of the UNET architecture,where it incorporates an attention mechanism to enhance the model's focus on relevant features within an image.
+Components of ATTENTION U-NET are:
+* Attention Gates (AGs):Attention Gates help the model focus on specific parts of the input feature maps, dynamically highlighting regions that are important for segmentation.
+* Attention Mechanism:The attention mechanism works by computing a weight map that assigns higher values to the most relevant spatial locations.
+* Skip Connections with Attention:skip connections in Attention U-Net carry feature maps from the encoder to the decoder. However, attention gates are applied to these skip connections, refining the features passed between the two paths.
 
+<div align="center">
+<img src="https://www.researchgate.net/publication/356730514/figure/fig3/AS:11431281088641163@1665194986855/Proposed-2D-Attention-U-Net-architecture-Example-with-three-downsampling-levels-and-a.png" alt="ATTENTION UNET" width="700"/></div>
+  
