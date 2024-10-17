@@ -265,10 +265,7 @@ The Dice score is calculated as follows:
 
 ### Dice Coefficient Formula:
 
-**Dice(A, B) =**  
-\[
-\frac{2 \cdot |A \cap B|}{|A| + |B|}
-\]
+\[ \text{Dice}(A, B) = \frac{2 \cdot |A \cap B|}{|A| + |B|} \]
 
 Where:
 
@@ -278,5 +275,6 @@ Where:
 - \(|A|\) and \(|B|\) are the total number of pixels in **A** and **B** (i.e., true positives + false positives + false negatives).
 
 </div>
+
 
 
