@@ -25,7 +25,7 @@ Components of U-Net++ are:
 This helps to reduce the issue of vanishing gradients and allows for more effective training of deeper networks.
 
 <div align="center">
-<img src="https://media.springernature.com/lw1200/springer-static/image/art%3A10.1007%2Fs11042-022-13256-6/MediaObjects/11042_2022_13256_Fig1_HTML.png" alt="ATTENTION UNET" width="700"/></div>
+<img src="https://media.geeksforgeeks.org/wp-content/uploads/20230628132335/UNET.webp" alt="NESTED UNET" width="700"/></div>
 
 ## ATTENTION U-NET
 ATTENTION UNET is an advanced varient of the UNET architecture,where it incorporates an attention mechanism to enhance the model's focus on relevant features within an image.
@@ -63,7 +63,11 @@ class ConvBlock(nn.Module):
         return self.conv(x);
  ```
 ConvBlock Class:
-Defines a convolutional block consisting of two convolutional layers, each followed by batch normalization and a ReLU activation function
+Defines a convolutional block consisting of two convolutional layers, each followed by batch normalization and a ReLU activation function.
+Components:
+* Convolutional Layer (nn.Conv2d): Applies a 2D convolution operation on the input.
+* Batch Normalization (nn.BatchNorm2d): Normalizes the output to stabilize and accelerate training.
+* ReLU Activation (nn.ReLU): Adds non-linearity, allowing the network to learn complex patterns.
 
 ```
 class NestedUNet(nn.Module):
@@ -141,5 +145,115 @@ This class defines the structure of the Nested U-Net model. It consists of a dow
   - self.final: The last convolutional layer which produces the final prediction with the specified number of output channels
  
 ### ATTENTION U-NET ARCHITECTURE:
+```
+class ConvBlock(nn.Module):
+    def __init__(self, in_channels, out_channels):
+        super(ConvBlock, self).__init__()
+        self.conv = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1),
+            nn.BatchNorm2d(out_channels),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1),
+            nn.BatchNorm2d(out_channels),
+            nn.ReLU(inplace=True)
+        )
+
+    def forward(self, x):
+        return self.conv(x)
+```
+ConvBlock Class:
+This block consists of two convolutional layers followed by batch normalization and ReLU activation functions, stacked sequentially.
+Components:
+* Convolutional Layer (nn.Conv2d): Applies a 2D convolution operation on the input.
+* Batch Normalization (nn.BatchNorm2d): Normalizes the output to stabilize and accelerate training.
+* ReLU Activation (nn.ReLU): Adds non-linearity, allowing the network to learn complex patterns.
+
+```
+class AttentionBlock(nn.Module):
+    def __init__(self, F_g, F_l, F_int):
+        super(AttentionBlock, self).__init__()
+        self.W_g = nn.Sequential(
+            nn.Conv2d(F_g, F_int, kernel_size=1, stride=1, padding=0, bias=True),
+            nn.BatchNorm2d(F_int)
+        )
+
+        self.W_x = nn.Sequential(
+            nn.Conv2d(F_l, F_int, kernel_size=1, stride=1, padding=0, bias=True),
+            nn.BatchNorm2d(F_int)
+        )
+
+        self.psi = nn.Sequential(
+            nn.Conv2d(F_int, 1, kernel_size=1, stride=1, padding=0, bias=True),
+            nn.BatchNorm2d(1),
+            nn.Sigmoid()
+        )
+
+        self.relu = nn.ReLU(inplace=True)
+
+    def forward(self, g, x):
+        g1 = self.W_g(g)
+        x1 = self.W_x(x)
+        psi = self.relu(g1 + x1)
+        psi = self.psi(psi)
+        return x * psi
+```
+AttentionBlock Class:
+The attention block enables the model to focus on relevant parts of the feature map by learning attention weights for each pixel, reducing irrelevant information from other regions.
+Components:
+* W_g and W_x: Two separate convolutional layers that transform the input from the encoder and the upsampled output from the decoder into a lower-dimensional space (F_int).
+* psi: Combines the transformed encoder and decoder feature maps and applies a Sigmoid function to generate attention weights between 0 and 1.
+* ReLU: Applied to the sum of the encoder and decoder feature maps before generating the attention weights.
+Forward Pass:
+* Inputs g (from the decoder) and x (from the encoder) are passed through separate transformation layers (W_g and W_x).
+* Their outputs are summed, passed through a ReLU activation, and then through the psi layer to generate attention weights.
+* The final output is the encoder feature map x multiplied by the computed attention weights.
+
+```
+def forward(self, x):
+        # Downsampling path
+        x1 = self.conv1(x)
+        x2 = self.conv2(F.max_pool2d(x1, 2))
+        x3 = self.conv3(F.max_pool2d(x2, 2))
+        x4 = self.conv4(F.max_pool2d(x3, 2))
+        x5 = self.conv5(F.max_pool2d(x4, 2))
+
+        # Upsampling path
+        d5 = self.up5(x5)
+        x4 = self.att5(d5, x4)
+        d5 = torch.cat((x4, d5), dim=1)
+        d5 = self.upconv5(d5)
+
+        d4 = self.up4(d5)
+        x3 = self.att4(d4, x3)
+        d4 = torch.cat((x3, d4), dim=1)
+        d4 = self.upconv4(d4)
+
+        d3 = self.up3(d4)
+        x2 = self.att3(d3, x2)
+        d3 = torch.cat((x2, d3), dim=1)
+        d3 = self.upconv3(d3)
+
+        d2 = self.up2(d3)
+        x1 = self.att2(d2, x1)
+        d2 = torch.cat((x1, d2), dim=1)
+        d2 = self.upconv2(d2)
+
+        output = self.final(d2)
+        return output
+```
+AttentionUNet Class:
+The main AttentionUNet class defines the complete architecture, which consists of an encoder (downsampling), bottleneck, and decoder (upsampling) paths. Attention blocks are applied in the decoder path to improve segmentation performance.
+* Downsampling Path (Encoder):
+  - The encoder consists of five convolutional blocks (conv1 to conv5). Each block is followed by a max pooling operation to reduce the spatial dimensions and capture high-level features. These features are progressively refined as the network gets deeper:
+  - Conv1 to Conv5: Each block uses ConvBlock, applying convolution, batch normalization, and ReLU activation to extract meaningful features from the input.
+* Bottleneck:
+   - The deepest layer (after conv5) contains the highest-level feature representations with the lowest spatial resolution.
+* Upsampling Path (Decoder):
+  - The decoder restores the spatial dimensions of the image while integrating attention mechanisms to selectively focus on the most relevant encoder features:
+* Transpose Convolution (nn.ConvTranspose2d): Upsamples the feature maps to double their spatial resolution.
+* Attention Blocks (att5, att4, att3, att2): These blocks calculate attention weights to select the most important features from the encoder, helping the model focus on relevant areas of the image.
+* Concatenation: After upsampling and applying attention, the output is concatenated with the corresponding encoder feature maps to combine low-level and high-level features.
+* ConvBlock: After concatenation, the combined feature maps pass through another convolutional block to refine the upsampled output.
+* Final Output: The final output layer uses a 1x1 convolution to map the final feature map to the desired number of output channels (e.g., for binary segmentation, this would be 1 channel).
 
 
