@@ -64,3 +64,78 @@ class ConvBlock(nn.Module):
  ```
 ConvBlock Class:
 Defines a convolutional block consisting of two convolutional layers, each followed by batch normalization and a ReLU activation function
+
+```
+class NestedUNet(nn.Module):
+    def __init__(self, in_channels=1, out_channels=1, deep_supervision=False):
+        super(NestedUNet, self).__init__()
+        self.deep_supervision = deep_supervision
+        nb_filter = [32, 64, 128, 256, 512]
+
+        # Downsampling path
+        self.conv1_1 = ConvBlock(in_channels, nb_filter[0])
+        self.conv2_1 = ConvBlock(nb_filter[0], nb_filter[1])
+        self.conv3_1 = ConvBlock(nb_filter[1], nb_filter[2])
+        self.conv4_1 = ConvBlock(nb_filter[2], nb_filter[3])
+        self.conv5_1 = ConvBlock(nb_filter[3], nb_filter[4])
+
+        # Upsampling path
+        self.up1_2 = self.up_conv(nb_filter[1], nb_filter[0])
+        self.up2_2 = self.up_conv(nb_filter[2], nb_filter[1])
+        self.up3_2 = self.up_conv(nb_filter[3], nb_filter[2])
+        self.up4_2 = self.up_conv(nb_filter[4], nb_filter[3])
+
+        # Define the ConvBlocks for the upsampling path
+        self.conv1_2 = ConvBlock(nb_filter[0] * 2, nb_filter[0])
+        self.conv2_2 = ConvBlock(nb_filter[1] * 2, nb_filter[1])
+        self.conv3_2 = ConvBlock(nb_filter[2] * 2, nb_filter[2])
+        self.conv4_2 = ConvBlock(nb_filter[3] * 2, nb_filter[3])
+
+        # Final convolution layers (deep supervision outputs)
+        self.final = nn.Conv2d(nb_filter[0], out_channels, kernel_size=1)  # Final output layer
+
+    def forward(self, x):
+        # Downsampling path
+        x1_1 = self.conv1_1(x)
+        x2_1 = self.conv2_1(F.max_pool2d(x1_1, 2))
+        x3_1 = self.conv3_1(F.max_pool2d(x2_1, 2))
+        x4_1 = self.conv4_1(F.max_pool2d(x3_1, 2))
+        x5_1 = self.conv5_1(F.max_pool2d(x4_1, 2))
+
+        # Upsampling path
+        x4_2 = self.up4_2(x5_1)  # Upsample
+        x4_2 = torch.cat([x4_2, x4_1], dim=1)  # Concatenate with downsampled x4
+        x4_2 = self.conv4_2(x4_2)
+
+        x3_2 = self.up3_2(x4_2)
+        x3_2 = torch.cat([x3_2, x3_1], dim=1)
+        x3_2 = self.conv3_2(x3_2)
+
+        x2_2 = self.up2_2(x3_2)
+        x2_2 = torch.cat([x2_2, x2_1], dim=1)
+        x2_2 = self.conv2_2(x2_2)
+
+        x1_2 = self.up1_2(x2_2)
+        x1_2 = torch.cat([x1_2, x1_1], dim=1)
+        x1_2 = self.conv1_2(x1_2)
+
+        # Final output
+        output = self.final(x1_2)
+        return output
+
+    def up_conv(self, in_channels, out_channels):
+        """Upsample and return a ConvTranspose2d layer"""
+        return nn.ConvTranspose2d(in_channels, out_channels, kernel_size=2, stride=2)
+```
+NestedUNet Class:
+This class defines the structure of the Nested U-Net model. It consists of a downsampling path and an upsampling path, allowing for skip connections that improve gradient flow and feature reuse.
+* Downsampling:
+   - The network uses a series of convolutional layers (ConvBlock), each followed by max pooling. The filter sizes double after each downsampling block.
+   - self.conv1_1, self.conv2_1, self.conv3_1, self.conv4_1, self.conv5_1: These are convolutional blocks for feature extraction. Each ConvBlock processes the input features, progressively increasing the depth (i.e., number of filters) as the image resolution decreases through max pooling.
+* Upsampling:
+  - For upsampling, transposed convolution (ConvTranspose2d) is used to increase the resolution of the feature maps.At each stage, the upsampled output is concatenated with the corresponding downsampling output (skip connections).
+  - self.up1_2, self.up2_2, self.up3_2, self.up4_2: These layers upsample the feature maps from the deeper layers.
+  - self.conv1_2, self.conv2_2, self.conv3_2, self.conv4_2: Convolutional blocks that process the concatenated upsampled features and skip connection outputs.
+* Final Output:
+  - The final convolutional layer reduces the number of channels to match the output (segmentation map).
+  - self.final: The last convolutional layer which produces the final prediction with the specified number of output channels
