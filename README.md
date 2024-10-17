@@ -1,6 +1,6 @@
 # U-NET++ AND ATTENTION U-NET
 
-### U-NET<br><hr>
+### U-NET<hr><br>
 
 U-NET one of the type of computer vision architecture,which is widely used for image segmentation particularly in Bio Medical Feilds.</br><br>
 Components of U-Net are:</br>
