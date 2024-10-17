@@ -25,7 +25,7 @@ Components of U-Net++ are:
 This helps to reduce the issue of vanishing gradients and allows for more effective training of deeper networks.
 
 <div align="center">
-<img src="https://media.geeksforgeeks.org/wp-content/uploads/20230628132335/UNET.webp" alt="UNET++" width="700"/></div>
+<img src="https://media.springernature.com/lw1200/springer-static/image/art%3A10.1007%2Fs11042-022-13256-6/MediaObjects/11042_2022_13256_Fig1_HTML.png" alt="ATTENTION UNET" width="700"/></div>
 
 ## ATTENTION U-NET
 ATTENTION UNET is an advanced varient of the UNET architecture,where it incorporates an attention mechanism to enhance the model's focus on relevant features within an image.
