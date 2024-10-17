@@ -262,9 +262,17 @@ The Dice coefficient (also known as the Sørensen–Dice index) is a commonly us
 
 The Dice score is calculated as follows:
 <div align="center">
-Dice coefficient=2⋅∣𝐴∩𝐵∣/∣𝐴∣+∣𝐵∣
+
+**Dice coefficient** = 
+\[
+2 \cdot \frac{|A \cap B|}{|A| + |B|}
+\]
+
 Where:
-* 𝐴 is the ground truth mask.
-* B is the predicted segmentation mask.
-* ∣A∣ and ∣B∣ are the cardinalities (number of pixels) in each mask.
+
+- **A** is the ground truth mask.
+- **B** is the predicted segmentation mask.
+- \(|A|\) and \(|B|\) are the cardinalities (number of pixels) in each mask.
+
 </div>
+
