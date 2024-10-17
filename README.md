@@ -243,17 +243,18 @@ def forward(self, x):
 ```
 AttentionUNet Class:
 The main AttentionUNet class defines the complete architecture, which consists of an encoder (downsampling), bottleneck, and decoder (upsampling) paths. Attention blocks are applied in the decoder path to improve segmentation performance.
-* Downsampling Path (Encoder):
-  - The encoder consists of five convolutional blocks (conv1 to conv5). Each block is followed by a max pooling operation to reduce the spatial dimensions and capture high-level features. These features are progressively refined as the network gets deeper:
+* Downsampling (Encoder):
+  - The encoder consists of five convolutional blocks (conv1 to conv5). Each block is followed by a max pooling operation to reduce the spatial dimensions and capture high-level features. 
   - Conv1 to Conv5: Each block uses ConvBlock, applying convolution, batch normalization, and ReLU activation to extract meaningful features from the input.
 * Bottleneck:
-   - The deepest layer (after conv5) contains the highest-level feature representations with the lowest spatial resolution.
-* Upsampling Path (Decoder):
+   - The deepest layer contains the highest-level feature representations with the lowest spatial resolution.
+* Upsampling (Decoder):
   - The decoder restores the spatial dimensions of the image while integrating attention mechanisms to selectively focus on the most relevant encoder features:
-* Transpose Convolution (nn.ConvTranspose2d): Upsamples the feature maps to double their spatial resolution.
-* Attention Blocks (att5, att4, att3, att2): These blocks calculate attention weights to select the most important features from the encoder, helping the model focus on relevant areas of the image.
-* Concatenation: After upsampling and applying attention, the output is concatenated with the corresponding encoder feature maps to combine low-level and high-level features.
-* ConvBlock: After concatenation, the combined feature maps pass through another convolutional block to refine the upsampled output.
-* Final Output: The final output layer uses a 1x1 convolution to map the final feature map to the desired number of output channels (e.g., for binary segmentation, this would be 1 channel).
+  - Transpose Convolution (nn.ConvTranspose2d): Upsamples the feature maps to double their spatial resolution.
+  - Attention Blocks (att5, att4, att3, att2): These blocks calculate attention weights to select the most important features from the encoder, helping the model focus on relevant areas of the image.
+  - Concatenation: After upsampling and applying attention, the output is concatenated with the corresponding encoder feature maps to combine low-level and high-level features.
+  - ConvBlock: After concatenation, the combined feature maps pass through another convolutional block to refine the upsampled output.
+* Final Output:
+  - The final output layer uses a 1x1 convolution to map the final feature map to the desired number of output channels (e.g., for binary segmentation, this would be 1 channel).
 
 
