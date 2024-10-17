@@ -38,14 +38,14 @@ Components of ATTENTION U-NET are:
 <img src="https://media.springernature.com/lw1200/springer-static/image/art%3A10.1007%2Fs11042-022-13256-6/MediaObjects/11042_2022_13256_Fig1_HTML.png" alt="ATTENTION UNET" width="700"/></div>
 
 ## Computer Vision: Brain MRI Metastasis Segmentation Assignment
-Preprocessing of Brain MRI Images:
+### Preprocessing of Brain MRI Images:
 * CLAHE Preprocessing: Improves image contrast using CLAHE to enhance metastasis visibility.
 * Custom Dataset Class: Loads images and corresponding masks, applies preprocessing, and converts them into PyTorch tensors.
 * Data Augmentation: Uses Albumentations for transformations like flips, rotations, and brightness adjustments to augment the training data.
 * Data Splitting: Divides the dataset into training (80%) and validation (20%) sets using train_test_split.
 * DataLoader Setup: Creates PyTorch DataLoader objects for batching and shuffling the training and validation data, essential for efficient model training
 
-Nested UNET Architecture:
+### Nested UNET Architecture:
 
 ```
 class ConvBlock(nn.Module):
@@ -139,3 +139,7 @@ This class defines the structure of the Nested U-Net model. It consists of a dow
 * Final Output:
   - The final convolutional layer reduces the number of channels to match the output (segmentation map).
   - self.final: The last convolutional layer which produces the final prediction with the specified number of output channels
+ 
+### ATTENTION U-NET ARCHITECTURE:
+
+
