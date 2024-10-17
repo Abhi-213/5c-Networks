@@ -270,7 +270,7 @@ def dice_coeff(pred, target, smooth=1e-5):
 The Dice score is calculated as follows:
 Dice Coefficient Formula:
 <div align="center">
-**Dice(A, B)** = 2.|**A∩B**|/|**A**|+|**B**|
+Dice(A, B) = 2.|A∩B|/|A|+|B|
 </div>
 
 Where:
