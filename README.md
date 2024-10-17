@@ -255,6 +255,16 @@ The main AttentionUNet class defines the complete architecture, which consists o
   - Concatenation: After upsampling and applying attention, the output is concatenated with the corresponding encoder feature maps to combine low-level and high-level features.
   - ConvBlock: After concatenation, the combined feature maps pass through another convolutional block to refine the upsampled output.
 * Final Output:
-  - The final output layer uses a 1x1 convolution to map the final feature map to the desired number of output channels (e.g., for binary segmentation, this would be 1 channel).
+  - The final output layer uses a 1x1 convolution to map the final feature map to the desired number of output channels.
 
+### DICE METRICS
+The Dice coefficient (also known as the Sørensen–Dice index) is a commonly used metric for evaluating the performance of segmentation models, particularly in the field of medical image analysis. It measures the overlap between two sets, such as the predicted segmentation mask and the ground truth mask. The Dice score ranges from 0 (no overlap) to 1 (perfect overlap).
 
+The Dice score is calculated as follows:
+<div align="center">
+Dice coefficient=2⋅∣𝐴∩𝐵∣/∣𝐴∣+∣𝐵∣
+Where:
+* 𝐴 is the ground truth mask.
+* B is the predicted segmentation mask.
+* ∣A∣ and ∣B∣ are the cardinalities (number of pixels) in each mask.
+</div>
